@@ -19,7 +19,7 @@ get_avg_startup() {
 
   results+=(${1} ${startup_avg})
 
-  printf "\rThe average startup time for ${1} is: ${(kv)results[${1}]}"
+  printf "\rThe average startup time for ${1} is: ${(kv)results[${1}]}\n"
 }
 
 # first we need to create the output folder(s)
@@ -34,14 +34,34 @@ source ${0:h}/oh-my-zsh.zsh
 
 # run the benchmarks
 ZDOTDIR=${omz_install} zsh -ic "for i in {1..10}; do { time zsh -ic 'exit' } 2>>! /tmp/zsh-benchmark/results/oh-my-zsh.log; done" &
-pid=$!
+local pid=$!
 
 print -n "\rNow benchmarking oh-my-zsh... ${spin[1]}"
 while kill -0 ${pid} 2> /dev/null; do
   spin
 done
+unset pid
 
 get_avg_startup "oh-my-zsh"
 
-#}}}
+#}}} 
+# zplug {{{
+source ${0:h}/zplug.zsh
+
+# run the benchmarks
+ZDOTDIR=${zplug_install} zsh -ic "for i in {1..10}; do { time zsh -ic 'exit' } 2>>! /tmp/zsh-benchmark/results/zplug.log; done" &
+local pidz=$!
+
+print -n "\rNow benchmarking zplug... ${spin[1]}"
+while kill -0 ${pidz} 2> /dev/null; do
+  spin
+done
+unset pidz
+
+# NOTE: manual cleanup required (bug in zplug?)
+#       see zplug.zsh for details
+
+get_avg_startup "zplug"
+
+# }}}
 # vim:foldmethod=marker:foldlevel=0
