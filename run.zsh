@@ -42,7 +42,7 @@ benchmark() {
 
   # set up the zpty for the framework
   print -n "\rNow benchmarking ${1}... ${spin[1]}"
-  zpty -b ${1} "ZDOTDIR=${test_dir}/${1} zsh -c \"for i in {1..10}; do {time zsh -ic 'exit' } 2>>! ${results_dir}/${1}.log; done\""
+  zpty -b ${1} "ZDOTDIR=${test_dir}/${1} zsh -c \"for i in {1..100}; do {time zsh -ic 'exit' } 2>>! ${results_dir}/${1}.log; done\""
   while zpty -t ${1} 2> /dev/null; do
     spin
   done
