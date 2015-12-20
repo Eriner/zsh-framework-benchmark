@@ -16,12 +16,14 @@ sed -i 's/ZSH=~\/.oh-my-zsh/ZSH=\/tmp\/zsh-benchmark\/oh-my-zsh\/.oh-my-zsh/g' $
 sed -i 's/~\/.zshrc/\/tmp\/zsh-benchmark\/oh-my-zsh\/.zshrc/g' ${omz_install}/install.sh
 # also remove the automatic-start of the new terminal
 sed -i 's/\<env zsh\>//g' ${omz_install}/install.sh
+# silence the git clone output
+sed -i 's/env git clone/env git clone --quiet/g' ${omz_install}/install.sh
 
 # run though sh as per the instructions
-sh ${omz_install}/install.sh
+sh ${omz_install}/install.sh 1> /dev/null
 
 # grab zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${omz_install}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+git clone --quiet https://github.com/zsh-users/zsh-syntax-highlighting.git ${omz_install}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
 # replace the plugin string with the selected plugins
 sed -i 's/^plugins=.*/plugins=(git history-substring-search zsh-syntax-highlighting)/g' ${omz_install}/.zshrc

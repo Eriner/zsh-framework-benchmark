@@ -8,7 +8,7 @@ zplug_install='/tmp/zsh-benchmark/zplug'
 mkdir -p ${zplug_install}
 
 # download framework
-curl -fLo ${zplug_install}/.zplug/zplug --create-dirs https://git.io/zplug
+curl -sfLo ${zplug_install}/.zplug/zplug --create-dirs https://git.io/zplug
 
 # add modules to .zshrc
 
