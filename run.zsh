@@ -3,10 +3,12 @@
 # we will use zpty to run all of the tests asynchronously
 zmodload zsh/zpty
 
-local testdir='/tmp/zsh-benchmark'
+local test_dir='/tmp/zsh-benchmark'
 local results_dir='/tmp/zsh-benchmark-results'
 local spin=('/' '-' '\' '|')
 typeset -A results
+
+mkdir -p ${results_dir}
 
 spin() {
   for i in ${spin[@]}; do
@@ -18,7 +20,7 @@ spin() {
 get_avg_startup() {
   local startup_time startup_total startup_avg
 
-  startup_times=($(cut /tmp/zsh-benchmark/results/${1}.log -c49-53))
+  startup_times=($(cut ${results_dir}/${1}.log -c49-53))
   for i in ${startup_times}; do (( startup_total += ${i} )); done
   for n in ${#startup_times}; do (( startup_avg = ${startup_total} / ${n} )); done
 
@@ -60,4 +62,5 @@ sleep 5
 benchmark 'oh-my-zsh'
 benchmark 'zplug'
 
-# vim:foldmethod=marker:foldlevel=0
+# for testing, may add option to keep these for user-testing of individual frameworks
+rm -rf ${test_dir}
