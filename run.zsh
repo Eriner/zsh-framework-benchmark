@@ -65,6 +65,7 @@ sleep 5
 benchmark 'oh-my-zsh'
 benchmark 'zplug'
 benchmark 'prezto'
+benchmark 'zim'
 
 # for testing, may add option to keep these for user-testing of individual frameworks
 rm -rf ${test_dir}
