@@ -3,7 +3,7 @@
 # initialize the framework
 
 # install location
-zplug_install='/tmp/zsh-benchmark/zplug'
+zplug_install="${test_dir}/zplug"
 
 mkdir -p ${zplug_install}
 

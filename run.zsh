@@ -3,12 +3,15 @@
 # we will use zpty to run all of the tests asynchronously
 zmodload zsh/zpty
 
-local test_dir='/tmp/zsh-benchmark'
-local results_dir='/tmp/zsh-benchmark-results'
 local spin=('/' '-' '\' '|')
 typeset -A results
+local test_dir='/tmp/zsh-benchmark'
+local results_dir='/tmp/zsh-benchmark-results'
 
+# the test_dir will be created by any (and every) framework's init script
+# create the directory for the results.
 mkdir -p ${results_dir}
+
 
 spin() {
   for i in ${spin[@]}; do
@@ -32,7 +35,7 @@ get_avg_startup() {
 benchmark() {
   # source the installer
   print -n "\rNow setting up ${1}... ${spin[1]}"
-  zpty -b ${1}-setup "${0:h}/${1}.zsh"
+  zpty -b ${1}-setup "source ${0:h}/${1}.zsh"
   while zpty -t ${1}-setup 2> /dev/null; do
     spin
   done

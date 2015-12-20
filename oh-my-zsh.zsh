@@ -1,9 +1,7 @@
 #!/usr/bin/env zsh
 
-# initialize the framework
-
 # install location
-omz_install='/tmp/zsh-benchmark/oh-my-zsh'
+omz_install="${test_dir}/oh-my-zsh"
 
 mkdir -p ${omz_install}
 
