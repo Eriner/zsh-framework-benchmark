@@ -55,8 +55,6 @@ benchmark() {
   get_avg_startup ${1}
 
 }
-# first we need to create the output folder(s)
-mkdir -p /tmp/zsh-benchmark/results
 
 print "This will take a LONG time, as it runs each framework startup 100 times"
 print "Average startup times for each framework will be printed as the tests progress.\n"
