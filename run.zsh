@@ -35,7 +35,7 @@ get_avg_startup() {
 benchmark() {
   # source the installer
   print -n "\rNow setting up ${1}... ${spin[1]}"
-  zpty -b ${1}-setup "source ${0:h}/${1}.zsh"
+  zpty -b ${1}-setup "${0:h}/${1}.zsh"
   while zpty -t ${1}-setup 2> /dev/null; do
     spin
   done
@@ -64,6 +64,7 @@ sleep 5
 
 benchmark 'oh-my-zsh'
 benchmark 'zplug'
+benchmark 'prezto'
 
 # for testing, may add option to keep these for user-testing of individual frameworks
 rm -rf ${test_dir}

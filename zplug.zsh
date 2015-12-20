@@ -26,4 +26,4 @@ zplug load' >>! ${zplug_install}/.zshrc
 #ZPLUG_HOME=${zplug_install}/.zplug
 
 # install the plugins
-ZDOTDIR=${zplug_install} zsh -ic "zplug install; exit"
+ZDOTDIR=${zplug_install} zsh -ic 'zplug install; exit'
