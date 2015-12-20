@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # install location
-omz_install="${test_dir}/oh-my-zsh"
+local omz_install="${test_dir}/oh-my-zsh"
 
 mkdir -p ${omz_install}
 
