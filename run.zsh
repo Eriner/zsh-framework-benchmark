@@ -35,7 +35,7 @@ get_avg_startup() {
 benchmark() {
   # source the installer
   print -n "\rNow setting up ${1}... ${spin[1]}"
-  zpty -b ${1}-setup "${0:h}/${1}.zsh"
+  zpty -b ${1}-setup "source ${0:h}/${1}.zsh"
   while zpty -t ${1}-setup 2> /dev/null; do
     spin
   done
@@ -56,7 +56,7 @@ benchmark() {
 
 }
 
-print "This will take a LONG time, as it runs each framework startup 100 times"
+print "This may take a LONG time, as it runs each framework startup 100 times"
 print "Average startup times for each framework will be printed as the tests progress.\n"
 sleep 5
 
