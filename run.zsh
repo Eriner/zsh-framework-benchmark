@@ -3,6 +3,8 @@
 # we will use zpty to run all of the tests asynchronously
 zmodload zsh/zpty
 
+local testdir='/tmp/zsh-benchmark'
+local results_dir='/tmp/zsh-benchmark-results'
 local spin=('/' '-' '\' '|')
 typeset -A results
 
@@ -28,16 +30,14 @@ get_avg_startup() {
 benchmark() {
   # source the installer
   print -n "\rNow setting up ${1}... ${spin[1]}"
-  zpty -b ${1}-setup "source ${0:h}/${1}.zsh"
+  zpty -b ${1}-setup "${0:h}/${1}.zsh"
   while zpty -t ${1}-setup 2> /dev/null; do
     spin
   done
 
   # set up the zpty for the framework
-  zpty -b ${1} "ZDOTDIR=/tmp/zsh-benchmark/${1} zsh -c \"for i in {1..10}; do {time zsh -ic 'exit' } 2>>! /tmp/zsh-benchmark/results/${1}.log; done\""
-  
-  # print notice of benchmarking until finished
   print -n "\rNow benchmarking ${1}... ${spin[1]}"
+  zpty -b ${1} "ZDOTDIR=${test_dir}/${1} zsh -c \"for i in {1..10}; do {time zsh -ic 'exit' } 2>>! ${results_dir}/${1}.log; done\""
   while zpty -t ${1} 2> /dev/null; do
     spin
   done
