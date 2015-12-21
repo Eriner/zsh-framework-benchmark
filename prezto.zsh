@@ -14,7 +14,7 @@ for rcfile in "${prezto_install}"/.zprezto/runcoms/^README.md(.N); do
 done
 
 # add the modules to the .zpreztorc file
-sed -ie "/'completion'/a\\
+sed -ie "/'utility'/a\\
   'syntax-highlighting' 'history-substring-search' \\\\" ${prezto_install}/.zpreztorc
 
 # prezto includes a .zlogin file, so source that (needs interactive)
