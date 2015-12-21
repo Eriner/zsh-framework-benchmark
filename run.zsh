@@ -18,11 +18,11 @@ while getopts ':hn:' option; do
        ;;
     n) iterations=${OPTARG}
        ;;
-    :) print "missing argument for -%s\n" "${OPTARG}" >&2
+    :) print "missing argument for: -${OPTARG}\n" >&2
        print "${usage}" >&2
        return 1
        ;;
-   \?) print "illegal option: -%s\n" "${OPTARG}" >&2
+   \?) print "illegal option: -${OPTARG}\n" >&2
        print "${usage}" >&2
        return 1
        ;;
