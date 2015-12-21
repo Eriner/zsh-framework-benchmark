@@ -5,18 +5,22 @@ local spin=('/' '-' '\' '|')
 local test_dir='/tmp/zsh-benchmark'
 local results_dir='/tmp/zsh-benchmark-results'
 local iterations=100
-local usage="${0} [-h] [-n] -- benchmark various zsh frameworks for startup speed.
+local frameworks=(oh-my-zsh zplug prezto zim)
+local usage="${0} [-h] [-n] [-f] -- benchmark various zsh frameworks for startup speed.
 
 options:
     -h  show this help
-    -n  set the number of iterations to run for each framework (default 100)"
+    -n  set the number of iterations to run for each framework (default: 100)
+    -f  select a specific framework to benchmark (default: all)"
 
-while getopts ':hn:' option; do
+while getopts ':hnf:' option; do
   case ${option} in
     h) print ${usage}
        return 0
        ;;
     n) iterations=${OPTARG}
+       ;;
+    f) frameworks=${OPTARG}
        ;;
     :) print "missing argument for: -${OPTARG}\n" >&2
        print "${usage}" >&2
@@ -86,10 +90,9 @@ print "This may take a LONG time, as it runs each framework startup ${iterations
 print "Average startup times for each framework will be printed as the tests progress.\n"
 sleep 5
 
-benchmark 'oh-my-zsh'
-benchmark 'zplug'
-benchmark 'prezto'
-benchmark 'zim'
+for framework in ${frameworks}; do
+  benchmark ${framework}
+done
 
 # for testing, may add option to keep these for user-testing of individual frameworks
 rm -rf ${test_dir}
