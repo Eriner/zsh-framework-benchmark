@@ -9,8 +9,8 @@ curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh
 
 
 # before we run the script, we're going to change where oh-my-zsh installs.
-sed -i "s,ZSH=~\/.oh-my-zsh,ZSH=${omz_install}\/.oh-my-zsh,g" ${omz_install}/install.sh
-sed -i "s,~\/.zshrc,${omz_install}\/.zshrc,g" ${omz_install}/install.sh
+sed -i "s,ZSH=~/.oh-my-zsh,ZSH=${omz_install}/.oh-my-zsh,g" ${omz_install}/install.sh
+sed -i "s,~/.zshrc,${omz_install}/.zshrc,g" ${omz_install}/install.sh
 # also remove the automatic-start of the new terminal
 sed -i 's/\<env zsh\>//g' "${omz_install}/install.sh"
 # silence the git clone output
