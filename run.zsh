@@ -88,7 +88,6 @@ benchmark() {
 
 print "This may take a LONG time, as it runs each framework startup ${iterations} times"
 print "Average startup times for each framework will be printed as the tests progress.\n"
-sleep 5
 
 for framework in ${frameworks}; do
   benchmark ${framework}
