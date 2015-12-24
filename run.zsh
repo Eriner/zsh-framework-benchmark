@@ -4,35 +4,32 @@ typeset -A results
 local spin=('/' '-' '\' '|')
 local test_dir='/tmp/zsh-benchmark'
 local results_dir='/tmp/zsh-benchmark-results'
-local iterations=100
+local integer iterations=100
 local frameworks=(oh-my-zsh zplug prezto zim)
-local usage="${0} [-h] [-n] [-f] -- benchmark various zsh frameworks for startup speed.
+local usage='${0} <options>
+Options:
+    -h                  Show this help
+    -n <num>            Set the number of iterations to run for each framework (default: 100)
+    -f <framework>      Select a specific framework to benchmark (default: all)'
 
-options:
-    -h  show this help
-    -n  set the number of iterations to run for each framework (default: 100)
-    -f  select a specific framework to benchmark (default: all)"
-
-while getopts ':hnf:' option; do
-  case ${option} in
-    h) print ${usage}
-       return 0
-       ;;
-    n) iterations=${OPTARG}
-       ;;
-    f) frameworks=${OPTARG}
-       ;;
-    :) print "missing argument for: -${OPTARG}\n" >&2
-       print "${usage}" >&2
-       return 1
-       ;;
-   \?) print "illegal option: -${OPTARG}\n" >&2
-       print "${usage}" >&2
-       return 1
-       ;;
-   esac
+while [[ ${#} -gt 0 && ${1} == -[hnf] ]]; do
+  case ${1} in
+    -h)
+      print ${usage}
+      return 0
+      ;;
+    -n)
+      shift
+      iterations=${1}
+      shift
+      ;;
+    -f)
+      shift
+      frameworks=${1}
+      shift
+      ;;
+  esac
 done
-shift $(( OPTIND - 1 ))
 
 # we will use zpty to run all of the tests asynchronously
 zmodload zsh/zpty
