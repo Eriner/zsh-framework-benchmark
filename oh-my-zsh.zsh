@@ -18,6 +18,9 @@ sed -i 's/env git clone/env git clone --quiet/g' ${omz_install}/install.sh
 # remove the chsh crap
 sed -i '89,103d' ${omz_install}/install.sh
 
+# we don't need auto-update stuff
+DISABLE_AUTO_UPDATE=true
+
 # run though sh as per the instructions
 sh ${omz_install}/install.sh 1> /dev/null
 
