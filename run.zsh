@@ -6,11 +6,11 @@ local test_dir='/tmp/zsh-benchmark'
 local results_dir='/tmp/zsh-benchmark-results'
 local integer iterations=100
 local frameworks=(oh-my-zsh zplug prezto zim)
-local usage='${0} <options>
+local usage="${0} <options>
 Options:
     -h                  Show this help
     -n <num>            Set the number of iterations to run for each framework (default: 100)
-    -f <framework>      Select a specific framework to benchmark (default: all)'
+    -f <framework>      Select a specific framework to benchmark (default: all)"
 
 while [[ ${#} -gt 0 && ${1} == -[hnf] ]]; do
   case ${1} in
