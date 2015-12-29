@@ -1,22 +1,39 @@
 #!/usr/bin/env zsh
 
 typeset -A results
-local spin=('/' '-' '\' '|')
-local test_dir='/tmp/zsh-benchmark'
-local results_dir='/tmp/zsh-benchmark-results'
-local integer iterations=100
-local frameworks=(oh-my-zsh zplug prezto zim)
-local usage="${0} <options>
+spin=('/' '-' '\' '|')
+test_dir='/tmp/zsh-benchmark'
+keep_frameworks=false
+integer iterations=100
+frameworks=(oh-my-zsh zplug prezto zim)
+usage="${0} <options>
 Options:
     -h                  Show this help
+    -k                  Keep the frameworks (don't delete) after the tests are complete (default: delete)
+    -p <path>           Set the path to where the frameworks should be 'installed' (default: /tmp/zsh-benchmark)
     -n <num>            Set the number of iterations to run for each framework (default: 100)
     -f <framework>      Select a specific framework to benchmark (default: all)"
 
-while [[ ${#} -gt 0 && ${1} == -[hnf] ]]; do
+while [[ ${#} -gt 0 && ${1} == -[hkpnf] ]]; do
   case ${1} in
     -h)
       print ${usage}
       return 0
+      ;;
+    -k)
+      keep_frameworks=true
+      shift
+      ;;
+    -p)
+      shift
+      mkdir -p ${1}
+      if [[ -d ${1} ]]; then
+        test_dir=${1}
+      else
+        print "${0}: directory ${1} specified by option '-p' is invalid" >&2
+        return 1
+      fi
+      shift
       ;;
     -n)
       shift
@@ -37,6 +54,7 @@ zmodload zsh/zpty
 
 # the test_dir will be created by any (and every) framework's init script
 # create the directory for the results.
+results_dir=${test_dir}-results
 mkdir -p ${results_dir}
 
 
@@ -90,5 +108,6 @@ for framework in ${frameworks}; do
   benchmark ${framework}
 done
 
-# for testing, may add option to keep these for user-testing of individual frameworks
-rm -rf ${test_dir}
+if [ ${keep_frameworks} = false ]; then
+  rm -rf ${test_dir}
+fi
