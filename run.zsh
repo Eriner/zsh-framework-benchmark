@@ -48,6 +48,20 @@ while [[ ${#} -gt 0 && ${1} == -[hkpnf] ]]; do
   esac
 done
 
+# do some checks of the current environment so we can do cleanups later
+#NOTE: these are workarounds, and are not the ideal solution to the problem of 'leftovers'
+if [[ -d ${ZDOTDIR:-${HOME}}/.zplug ]]; then
+  has_zplug=true
+else
+  has_zplug=false
+fi
+
+if [[ -s ${ZDOTDIR:-${HOME}}/.zsh-update ]]; then
+  has_omz=true
+else
+  has_omz=false
+fi
+
 # we will use zpty to run all of the tests asynchronously
 zmodload zsh/zpty
 
@@ -108,6 +122,16 @@ for framework in ${frameworks}; do
   benchmark ${framework}
 done
 
-if [ ${keep_frameworks} = false ]; then
+# cleanup frameworks unless '-k' was provided
+if ( ! ${keep_frameworks} ); then
   rm -rf ${test_dir}
+fi
+
+# cleanup any corpses/leftovers
+if ( ! ${has_zplug} ); then
+  rm -rf ${ZDOTDIR:-${HOME}}/.zplug
+fi
+
+if ( ! ${has_omz} ); then
+  rm -f ${ZDOTDIR:-${HOME}}/.zsh-update
 fi
