@@ -5,7 +5,7 @@ spin=('/' '-' '\' '|')
 test_dir='/tmp/zsh-benchmark'
 keep_frameworks=false
 integer iterations=100
-frameworks=(oh-my-zsh zplug prezto zim)
+frameworks=(vanilla oh-my-zsh zplug prezto zim)
 usage="${0} <options>
 Options:
     -h                  Show this help
