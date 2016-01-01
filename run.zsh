@@ -74,7 +74,7 @@ mkdir -p ${results_dir}
 
 spin() {
   for i in ${spin[@]}; do
-    printf "\b${i}"
+    print -n "\b${i}"
     sleep 0.1
   done
 }
@@ -88,7 +88,7 @@ get_avg_startup() {
 
   results+=(${1} ${startup_avg})
 
-  printf "\rThe average startup time for ${1} is: ${(kv)results[${1}]}\n"
+  print "\rThe average startup time for ${1} is: ${(kv)results[${1}]}"
 }
 
 benchmark() {
