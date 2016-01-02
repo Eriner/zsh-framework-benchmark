@@ -69,7 +69,7 @@ else
 fi
 
 # we will use zpty to run all of the tests asynchronously
-zmodload zsh/zpty
+zmodload zsh/zpty || return 1
 
 
 # the test_dir will be created by any (and every) framework's init script
@@ -98,6 +98,8 @@ get_avg_startup() {
 }
 
 benchmark() {
+  # setup the directory for the framework
+  mkdir -p ${test_dir}/${1}
   # source the installer
   print -n "\rNow setting up ${1}... ${spin[1]}"
   zpty -b ${1}-setup "source ${0:h}/${1}.zsh &>/dev/null"

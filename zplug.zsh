@@ -2,8 +2,6 @@
 
 local zplug_install="${test_dir}/zplug"
 
-mkdir -p ${zplug_install}
-
 # download framework
 curl -sfLo ${zplug_install}/.zplug/zplug --create-dirs https://git.io/zplug
 

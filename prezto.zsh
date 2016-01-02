@@ -2,8 +2,6 @@
 
 local prezto_install="${test_dir}/prezto"
 
-mkdir -p ${prezto_install}
-
 # download the repository
 git clone --quiet --recursive https://github.com/sorin-ionescu/prezto.git "${prezto_install}/.zprezto" 2>/dev/null 1>&2 
 

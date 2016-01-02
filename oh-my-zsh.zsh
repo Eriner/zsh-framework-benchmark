@@ -2,8 +2,6 @@
 
 local omz_install=${test_dir}/oh-my-zsh
 
-mkdir -p ${omz_install}
-
 # download the install script
 curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ${omz_install}/install.sh
 

@@ -2,8 +2,6 @@
 
 local zim_install="${test_dir}/zim"
 
-mkdir -p ${zim_install}
-
 # download the repository
 git clone --quiet --recursive https://github.com/Eriner/zim.git "${zim_install}/.zim" 2>/dev/null 1>&2
 
