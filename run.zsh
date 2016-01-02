@@ -105,10 +105,19 @@ benchmark() {
     spin
   done
 
+  # setup for run counting
+  if [[ -s "${test_dir}-results/${1}.log" ]]; then
+    local integer total_runs=$(wc -l < "${test_dir}-results/${1}.log")
+  else
+    local integer total_runs=0
+  fi
+
   # set up the zpty for the framework
-  print -n "\rNow benchmarking ${1}... ${spin[1]}"
   zpty -b ${1} "ZDOTDIR=${test_dir}/${1} zsh -c \"for i in {1..${iterations}}; do {time zsh -ic 'exit' } 2>>! ${results_dir}/${1}.log; done\""
   while zpty -t ${1} 2> /dev/null; do
+    # calculate how many runs we've done
+    local iter=$(( $(wc -l < "${test_dir}-results/${1}.log") - ${total_runs} ))
+    print -n "\rNow benchmarking ${1}... (${iter} / ${iterations}) ${spin[1]}"
     spin
   done
 
