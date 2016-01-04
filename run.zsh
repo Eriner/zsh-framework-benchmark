@@ -16,41 +16,36 @@ Options:
 
 while [[ ${#} -gt 0 && ${1} == -[hkpnf] ]]; do
   case ${1} in
-    -h)
-      print ${usage}
-      return 0
-      ;;
-    -k)
-      keep_frameworks=true
-      shift
-      ;;
-    -p)
-      shift
-      mkdir -p ${1}
-      if [[ -d ${1} ]]; then
-        test_dir=${1}
-      else
-        print "${0}: directory ${1} specified by option '-p' is invalid" >&2
-        return 1
-      fi
-      shift
-      ;;
-    -n)
-      shift
-      iterations=${1}
-      shift
-      ;;
-    -f)
-      shift
-      if [[ ${frameworks[(r)${1}]} == ${1} ]]; then
-        frameworks=${1}
-      else
-        print "${0}: framework \"${1}\" is not a valid framework." >&2
-        print "Available frameworks are: ${frameworks}" >&2
-        return 1
-      fi
-      shift
-      ;;
+    -h) print ${usage}
+        return 0
+        ;;
+    -k) keep_frameworks=true
+        shift
+        ;;
+    -p) shift
+        mkdir -p ${1}
+        if [[ -d ${1} ]]; then
+          test_dir=${1}
+        else
+          print "${0}: directory ${1} specified by option '-p' is invalid" >&2
+          return 1
+        fi
+        shift
+        ;;
+    -n) shift
+        iterations=${1}
+        shift
+        ;;
+    -f) shift
+        if [[ ${frameworks[(r)${1}]} == ${1} ]]; then
+          frameworks=${1}
+        else
+          print "${0}: framework \"${1}\" is not a valid framework." >&2
+          print "Available frameworks are: ${frameworks}" >&2
+          return 1
+        fi
+        shift
+        ;;
   esac
 done
 
