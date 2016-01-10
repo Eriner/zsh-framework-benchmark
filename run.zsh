@@ -74,6 +74,7 @@ mkdir -p ${results_dir}
 
 
 spin() {
+  local i
   for i in ${spin[@]}; do
     print -n "\b${i}"
     sleep 0.1
@@ -82,6 +83,7 @@ spin() {
 
 get_avg_startup() {
   local startup_time startup_total startup_avg
+  local i n
 
   startup_times=($(cut ${results_dir}/${1}.log -c49-53))
   for i in ${startup_times}; do (( startup_total += ${i} )); done
@@ -127,8 +129,8 @@ benchmark() {
 
 }
 
-print "This may take a LONG time, as it runs each framework startup ${iterations} times"
-print "Average startup times for each framework will be printed as the tests progress.\n"
+print "This may take a LONG time, as it runs each framework startup ${iterations} times.
+Average startup times for each framework will be printed as the tests progress.\n"
 
 for framework in ${frameworks}; do
   benchmark ${framework}
