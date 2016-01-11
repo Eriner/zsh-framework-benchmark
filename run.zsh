@@ -40,8 +40,8 @@ while [[ ${#} -gt 0 && ${1} == -[hkpnf] ]]; do
         if [[ ${frameworks[(r)${1}]} == ${1} ]]; then
           frameworks=${1}
         else
-          print "${0}: framework \"${1}\" is not a valid framework." >&2
-          print "Available frameworks are: ${frameworks}" >&2
+          print "${0}: framework \"${1}\" is not a valid framework.
+Available frameworks are: ${frameworks}" >&2
           return 1
         fi
         shift
