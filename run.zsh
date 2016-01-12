@@ -6,7 +6,7 @@ test_dir='/tmp/zsh-benchmark'
 keep_frameworks=false
 integer iterations=100
 frameworks=(vanilla oh-my-zsh zplug prezto zim)
-usage="${0} <options>
+usage="${0} [options]
 Options:
     -h                  Show this help
     -k                  Keep the frameworks (don't delete) after the tests are complete (default: delete)
