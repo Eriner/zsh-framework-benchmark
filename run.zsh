@@ -95,8 +95,12 @@ get_avg_startup() {
 }
 
 benchmark() {
+  # first delete any old instances of the frameworks
+  rm -rf "${test_dir}/${1}"
+
   # setup the directory for the framework
   mkdir -p ${test_dir}/${1}
+
   # source the installer
   print -n "\rNow setting up ${1}... ${spin[1]}"
   zpty -b ${1}-setup "source ${0:h}/${1}.zsh &>/dev/null"
