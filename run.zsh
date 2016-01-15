@@ -104,6 +104,9 @@ benchmark() {
     spin
   done
 
+  # ensure we have a file
+  touch "${test_dir}-results/${1}.log"
+
   # setup for run counting
   if [[ -s "${test_dir}-results/${1}.log" ]]; then
     local integer total_runs=$(wc -l < "${test_dir}-results/${1}.log")
