@@ -132,7 +132,7 @@ benchmark() {
   zpty -d ${1}-setup
 
   # print average time
-  get_avg_startup ${1}
+  get_avg_startup ${1} 2>/dev/null
 
 }
 
