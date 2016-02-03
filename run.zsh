@@ -1,11 +1,24 @@
 #!/usr/bin/env zsh
 
+# ensure that we're not running zsh from THREE AND A HALF YEARS AGO
+if ! autoload -Uz is-at-least || ! is-at-least '5.0'; then
+  print "${0}: running zsh < 5.0. Any further tests would be meaningless.
+  Your shell has been outdated for over three and a half years." >&2
+  return 1
+fi
+
 typeset -A results
 spin=('/' '-' '\' '|')
 test_dir='/tmp/zsh-benchmark'
 keep_frameworks=false
 integer iterations=100
-frameworks=(vanilla oh-my-zsh zplug prezto zim)
+# adding vanilla first, because it should always be the baseline
+frameworks=(vanilla)
+for f in ${0:h}/frameworks/*; do
+  if [[ ${f:t:r} != 'vanilla' ]]; then 
+    frameworks+=${f:t:r}
+  fi
+done
 usage="${0} [options]
 Options:
     -h                  Show this help
@@ -103,7 +116,7 @@ benchmark() {
 
   # source the installer
   print -n "\rNow setting up ${1}... ${spin[1]}"
-  zpty -b ${1}-setup "source ${0:h}/${1}.zsh &>/dev/null"
+  zpty -b ${1}-setup "source ${0:h}/frameworks/${1}.zsh &>/dev/null"
   while zpty -t ${1}-setup 2> /dev/null; do
     spin
   done
