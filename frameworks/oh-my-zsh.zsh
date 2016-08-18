@@ -14,10 +14,13 @@ sed -i 's/\<env zsh\>//g' "${omz_install}/install.sh"
 # silence the git clone output
 sed -i 's/env git clone/env git clone --quiet/g' ${omz_install}/install.sh
 # remove the chsh crap
-sed -i '89,103d' ${omz_install}/install.sh
+sed -i '83,96d' ${omz_install}/install.sh
 
 # we don't need auto-update stuff
 DISABLE_AUTO_UPDATE=true
+
+# permit to execute the benchmark even if it run on zsh with oh-my-zsh
+ZSH="${omz_install}/.oh-my-zsh"
 
 # run though sh as per the instructions
 sh ${omz_install}/install.sh 1> /dev/null

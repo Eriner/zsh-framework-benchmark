@@ -19,6 +19,10 @@ for f in ${0:h}/frameworks/*; do
     frameworks+=${f:t:r}
   fi
 done
+
+# ensure to use dot ('.') as decimal separator, because some locale (ex: it_IT) use comma (',')
+unset LC_NUMERIC
+
 usage="${0} [options]
 Options:
     -h                  Show this help
