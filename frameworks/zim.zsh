@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-local zim_install="${test_dir}/zim"
+local zim_install=${test_dir}/${0:t:r}
 
 # download the repository
 git clone --quiet --recursive https://github.com/Eriner/zim.git "${zim_install}/.zim" 2>/dev/null 1>&2

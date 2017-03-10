@@ -9,14 +9,16 @@ fi
 
 typeset -A results
 spin=('/' '-' '\' '|')
-test_dir='/tmp/zsh-benchmark'
+test_dir="$(mktemp -d)-zsh-benchmark"
 keep_frameworks=false
+force_delete=false
 integer iterations=100
+frameworks=()
 # adding vanilla first, because it should always be the baseline
-frameworks=(vanilla)
+available_frameworks=(vanilla)
 for f in ${0:h}/frameworks/*; do
-  if [[ ${f:t:r} != 'vanilla' ]]; then 
-    frameworks+=${f:t:r}
+  if [[ ${f:t:r} != 'vanilla' ]]; then
+    available_frameworks+=${f:t:r}
   fi
 done
 
@@ -27,16 +29,20 @@ usage="${0} [options]
 Options:
     -h                  Show this help
     -k                  Keep the frameworks (don't delete) after the tests are complete (default: delete)
-    -p <path>           Set the path to where the frameworks should be 'installed' (default: /tmp/zsh-benchmark)
+    -p <path>           Set the path to where the frameworks should be 'installed' (default: auto-generated)
     -n <num>            Set the number of iterations to run for each framework (default: 100)
-    -f <framework>      Select a specific framework to benchmark (default: all)"
+    -f <framework>      Select a specific framework to benchmark (default: all; can specify more than once)
+    -F                  Forcibly delete ~/.zplug and OMZ update files when cleaning up"
 
-while [[ ${#} -gt 0 && ${1} == -[hkpnf] ]]; do
+while [[ ${#} -gt 0 ]]; do
   case ${1} in
     -h) print ${usage}
         return 0
         ;;
     -k) keep_frameworks=true
+        shift
+        ;;
+    -F) force_delete=true
         shift
         ;;
     -p) shift
@@ -54,17 +60,29 @@ while [[ ${#} -gt 0 && ${1} == -[hkpnf] ]]; do
         shift
         ;;
     -f) shift
-        if [[ ${frameworks[(r)${1}]} == ${1} ]]; then
-          frameworks=${1}
+        if [[ ${available_frameworks[(r)${1}]} == ${1} ]]; then
+          frameworks+=${1}
         else
           print "${0}: framework \"${1}\" is not a valid framework.
-Available frameworks are: ${frameworks}" >&2
+Available frameworks are: ${available_frameworks}" >&2
           return 1
         fi
         shift
         ;;
+    *) print ${usage}
+       return 1
+       ;;
   esac
 done
+
+if (( ${#} )); then
+  print ${usage}
+  return 1
+fi
+
+if (( ! ${#frameworks} )); then
+  frameworks=($available_frameworks)
+fi
 
 # do some checks of the current environment so we can do cleanups later
 #NOTE: these are workarounds, and are not the ideal solution to the problem of 'leftovers'
@@ -102,9 +120,10 @@ get_avg_startup() {
   local startup_time startup_total startup_avg
   local i n
 
-  startup_times=($(cut ${results_dir}/${1}.log -c49-53))
+  startup_times=($(sed -e 's/.*cpu //' -e 's/ total//' ${results_dir}/${1}.log))
   for i in ${startup_times}; do (( startup_total += ${i} )); done
-  for n in ${#startup_times}; do (( startup_avg = ${startup_total} / ${n} )); done
+  (( startup_avg = ${startup_total} / ${#startup_times} * 1000 ))
+  startup_avg=$(printf "%.0f ms" ${startup_avg})
 
   results+=(${1} ${startup_avg})
 
@@ -149,15 +168,19 @@ benchmark() {
   zpty -d ${1}-setup
 
   # print average time
-  get_avg_startup ${1} 2>/dev/null
+  get_avg_startup ${1}
 
 }
+
+# Useful for debugging.
+print "Frameworks: ${test_dir}"
+print "Results: ${results_dir}\n"
 
 print "This may take a LONG time, as it runs each framework startup ${iterations} times.
 Average startup times for each framework will be printed as the tests progress.\n"
 
 for framework in ${frameworks}; do
-  benchmark ${framework}
+  benchmark ${framework} || exit $status
 done
 
 # cleanup frameworks unless '-k' was provided
@@ -166,10 +189,13 @@ if ( ! ${keep_frameworks} ); then
 fi
 
 # cleanup any corpses/leftovers
-if ( ! ${has_zplug} ); then
-  rm -rf ${ZDOTDIR:-${HOME}}/.zplug
-fi
+if ( ${force_delete} ); then
+  echo 'removing zplug'
+  if ( ! ${has_zplug} ); then
+    # echo rm -rf ${ZDOTDIR:-${HOME}}/.zplug
+  fi
 
-if ( ! ${has_omz} ); then
-  rm -f ${ZDOTDIR:-${HOME}}/.zsh-update
+  if ( ! ${has_omz} ); then
+    rm -f ${ZDOTDIR:-${HOME}}/.zsh-update
+  fi
 fi

@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-local zplug_install="${test_dir}/zplug"
+local zplug_install=${test_dir}/${0:t:r}
 
 # download framework
 curl -sfLo ${zplug_install}/.zplug/zplug --create-dirs https://git.io/zplug
