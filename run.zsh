@@ -190,9 +190,8 @@ fi
 
 # cleanup any corpses/leftovers
 if ( ${force_delete} ); then
-  echo 'removing zplug'
   if ( ! ${has_zplug} ); then
-    # echo rm -rf ${ZDOTDIR:-${HOME}}/.zplug
+    rm -rf ${ZDOTDIR:-${HOME}}/.zplug
   fi
 
   if ( ! ${has_omz} ); then
